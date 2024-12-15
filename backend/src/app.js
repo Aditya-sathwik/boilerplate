@@ -19,4 +19,4 @@ app.use(cors({
     app.use('/api/v1/auth',authRoutes)
 
 
-    export default {app}
+    export  {app}

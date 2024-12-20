@@ -8,7 +8,7 @@ import fs from 'fs'
         api_secret: process.env.CLOUD_API_SECRET 
 });
 
-const uploadOnCloud = async (localfilepath) =>{
+const uploadOnCloudinary = async (localfilepath) =>{
     try{
         if (!localfilepath) return null
         const response = await cloudinary.uploader.upload(localfilepath, {
@@ -28,4 +28,4 @@ resource_type: 'auto',
 
 }
     
-export  {uploadOnCloud}
+export  {uploadOnCloudinary}

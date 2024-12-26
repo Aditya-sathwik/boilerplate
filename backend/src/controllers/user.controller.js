@@ -27,7 +27,7 @@ const registeruser = asyncHandler(async(req,res)=>{
       throw new ApiError(400,"Enter a valid email")
     }
 
-    const existedUser = user.findOne({$or: [ {email},{username}]})
+    const existedUser = await user.findOne({$or: [ {email},{username}]})
     console.log(existedUser);
 
     if (existedUser) {
@@ -58,19 +58,29 @@ const registeruser = asyncHandler(async(req,res)=>{
       email,
       password,
       avatar:avatar.url,
-      coverimage:coverimage?.url ||""
+      coverimage: coverimage?.url || ""
     })
 
-    const createdUser = await user.findOne(email).select("-Password  -refreshToken")
+    const createdUser = await user.findOne({ email }).select("-Password -refreshToken");
 
     if (!createdUser) {
       throw new ApiError(500,"User not found");
       
     }
 
-    return res.status(201).json(
-     new ApiResponse(201,createdUser,"User created successfully")
-    )
+    // Include the coverimage field in the response
+    const responseUser = {
+      ...createdUser.toObject(),
+      coverimage: coverimage?.url || "",
+      avatar : avatar.url
+    };
+
+    res.status(201).json({
+      statusCode: 201,
+      data: responseUser,
+      message: "User created successfully",
+      success: true
+    });
    
 })
 
